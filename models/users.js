@@ -37,7 +37,7 @@ module.exports = function (sequelize, DataTypes) {
     return jwt.sign(
       {
         userId: this.id,
-   
+        levels: this.levels,
       },
       "motcle"
     );
