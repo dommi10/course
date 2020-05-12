@@ -36,7 +36,7 @@ module.exports = function (sequelize, DataTypes) {
   User.prototype.generateJWT = function generateJWT() {
     return jwt.sign(
       {
-        userid: this.id,
+        userId: this.id,
    
       },
       "motcle"
