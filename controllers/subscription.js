@@ -45,9 +45,8 @@ module.exports = {
   },
   subscri: function (req, res) {
     const { user } = req;
-    const users = req.body.users;
     models.abonnement
-      .findAll({where:{users:user.userId}})
+      .findAll({ where: { users: user.userId } })
       .then((set) => {
         if (set) res.json(set);
         else
