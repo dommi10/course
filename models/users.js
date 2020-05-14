@@ -36,8 +36,8 @@ module.exports = function (sequelize, DataTypes) {
   User.prototype.generateJWT = function generateJWT() {
     return jwt.sign(
       {
-        userid: this.id,
-   
+        userId: this.id,
+        levels: this.levels,
       },
       "motcle"
     );
@@ -45,7 +45,7 @@ module.exports = function (sequelize, DataTypes) {
 
   User.prototype.toAuthJSON = function toAuthJSON() {
     return {
-      id: this.id,
+      userId: this.id,
       levels: this.levels,
       token: this.generateJWT(),
     };

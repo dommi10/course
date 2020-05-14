@@ -15,18 +15,28 @@ module.exports = {
 
     models.abonnement
       .findOne({
-        where: { users: items.users },
+        where: { users: items.users, course: items.course },
       })
       .then((subscri) => {
-        if (subscri) {
+        if (subscri)
           res.json({
             error: "Vous avez déjà un abonnement pour ce cour...",
           });
-        } else {
-          models.abonnement.create(items).then((newsubscri) => {
-            res.json(newsubscri);
-          });
-        }
+        else
+          models.course
+            .findOne({
+              where: { id: items.course, prix: prix },
+            })
+            .then((newSubscri) => {
+              if (newSubscri)
+                models.abonnement.create(items).then((lastsubscri) => {
+                  res.json(lastsubscri);
+                });
+              else
+                res.json({
+                  error: "Montant incorrect pour cette abonnement...",
+                });
+            });
       })
       .catch((error) => {
         console.log(error);
@@ -45,15 +55,21 @@ module.exports = {
   },
   subscri: function (req, res) {
     const { user } = req;
-    const users = req.body.users;
     models.abonnement
-      .findAll({where:{users:user.userId}})
+      .findAll({
+        include: [
+          {
+            model: models.users,
+            // attributes: ["id", "username"],
+            where: { users: user.userId },
+          },
+        ],
+
+        //
+      })
       .then((set) => {
-        if (set) res.json(set);
-        else
-          res.status(403).json({
-            error: "Vous etes abonné à aucun cours...",
-          });
+        if (set) res.json({ result: set });
+        else res.json("Vous etes abonné à aucun cours...");
       })
       .catch((error) => {
         console.log(error);

@@ -4,37 +4,37 @@ const shortid = require("shortid");
 module.exports = {
   add: function (req, res) {
     try {
-      const { title, dates } = req.body;
+      const { title, dates, prix } = req.body;
       const { user } = req;
       console.log("##ID-> " + shortid.generate());
       const items = {
         id: shortid.generate(),
-        title: req.body.title,
+        title: title,
         dates: dates,
         userid: user.userId,
+        prix: prix,
       };
-
-      models.course
-        .findOne({ where: { title: title } })
-        .then((cours) => {
-          console.log("##Level-> " + user.levels);
-          if (cours) res.status(403).json({ error: "ce cours existe deja" });
-          else if (user.levels == 5)
-            models.course
-              .create(items)
-              .then((newCourse) => {
-                res.json({ newCourse });
-              })
-              .catch((err) => {
-                console.log(err);
-                res.status(403).json({ error: "something went wrong" });
-              });
-          else res.status(403).json({ error: "Acces Interdit !" });
-        })
-        .catch((error) => {
-          console.log(error);
-          res.status(403).json({ error: "something went wrong" });
-        });
+      if (user.levels == 5)
+        models.course
+          .findOne({ where: { title: title } })
+          .then((cours) => {
+            if (cours) res.status(403).json({ error: "ce cours existe deja" });
+            else
+              models.course
+                .create(items)
+                .then((newCourse) => {
+                  res.json({ newCourse });
+                })
+                .catch((err) => {
+                  console.log(err);
+                  res.status(403).json({ error: "something went wrong" });
+                });
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(403).json({ error: "something went wrong" });
+          });
+      else res.status(403).json({ error: "Acces Interdit !" });
     } catch (error) {
       console.log(error);
       return res.status(403).json({
@@ -85,7 +85,7 @@ module.exports = {
         where: { userid: user.userId },
       })
       .then((courses) => {
-        if (!courses) {
+        if (courses) {
           res.json(courses);
         } else {
           res.status(403).json({
@@ -106,12 +106,7 @@ module.exports = {
 
     if (user.levels == 5) res.json("Acces refuser...");
     else
-models.
-
-
-
-
-      models.course
+      models.models.course
         .destroy({
           where: { userid: user.userId, id },
         })

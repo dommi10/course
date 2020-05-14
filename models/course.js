@@ -21,6 +21,11 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.STRING(25),
         allowNull: true,
       },
+      prix: {
+        type: DataTypes.FLOAT(6),
+        allowNull: true,
+        defaultValue: "1.0",
+      },
       deleted: {
         type: DataTypes.INTEGER(1),
         allowNull: true,

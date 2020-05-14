@@ -4,6 +4,7 @@ const middleware = require("../middleware/jwt");
 
 rooter.use(middleware.verifyToken);
 rooter.get("/", controller.c_ctrl.courses);
+rooter.post("/add", controller.c_ctrl.add);
 rooter.post("/delete", controller.c_ctrl.deleted);
 
 module.exports = rooter;
