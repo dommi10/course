@@ -5,6 +5,9 @@
   "main": "app.js",
   "author": "Bin mocor",
   "license": "MIT",
+  "scripts": {
+    "start": "nodemon --exec app.js"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
@@ -13,12 +16,14 @@
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "mysql2": "^2.1.0",
-    "nodemon": "^2.0.3",
     "request": "^2.88.2",
     "request-promise": "^4.2.5",
     "sequelize": "^5.21.7",
     "sequelize-auto": "^0.4.29",
     "sequelize-cli": "^5.5.1",
     "shortid": "^2.2.15"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
   }
 }
