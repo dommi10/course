@@ -14,18 +14,18 @@ function checkError(req) {
 module.exports = {
   adduser: async function (req, res) {
     try {
-      const { email, passwords, levels } = req.body;
+      const { username, passwords, levels } = req.body;
 
       const item = new models.users({
         id: shortid.generate(),
-        username: email,
+        username: username,
         levels: levels,
       });
 
       if (
         (await models.users.findOne({
           where: {
-            username: email,
+            username: username,
           },
         })) != null
       ) {
