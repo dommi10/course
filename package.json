@@ -6,7 +6,7 @@
   "author": "Bin mocor",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --exec app.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
