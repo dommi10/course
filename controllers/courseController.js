@@ -80,41 +80,38 @@ module.exports = {
   },
   courses: function (req, res) {
     const { user } = req;
-    models.course
-      .findAll({
-        where: { userid: user.userId },
-      })
-      .then((courses) => {
-        if (courses) {
-          res.json(courses);
-        } else {
+
+    if (user.userId == 5)
+      models.course
+        .findAll()
+        .then((courses) => {
+          if (courses) res.json(courses);
+        })
+        .catch((error) => {
+          console.log(error);
           res.status(403).json({
-            error: "Aucun cours enregistrer",
+            error: "someone went wrong",
           });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(403).json({
-          error: "someone went wrong",
         });
-      });
+    else res.json("Accès refusé...");
   },
   deleted: function (req, res) {
     const { user } = req;
     const { id } = req.body;
 
-    if (user.levels == 5) res.json("Acces refuser...");
+    if (user.levels < 5) res.json({ error: "Acces refuser..." });
     else
-      models.models.course
-        .destroy({
-          where: { userid: user.userId, id },
+      models.course
+        .findOne({
+          where: { id: id },
         })
-        .then((isdelete) => {
-          if (isdelete)
-            res.json({
-              error: "success",
-            });
+        .then((course) => {
+          if (course) {
+            course.destroy();
+            res.json({ result: "delete success" });
+          } else {
+            res.json({ result: "item not existe" });
+          }
         })
         .catch((error) => {
           console.log(error);

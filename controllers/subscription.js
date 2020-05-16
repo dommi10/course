@@ -53,23 +53,30 @@ module.exports = {
       //    unscri.abonnement.Update
     });
   },
-  subscri: function (req, res) {
+  subscrition: function (req, res) {
     const { user } = req;
+    let items = {
+      user: {},
+      subsriptions: {},
+    };
     models.abonnement
       .findAll({
-        include: [
-          {
-            model: models.users,
-            // attributes: ["id", "username"],
-            where: { users: user.userId },
-          },
-        ],
-
+        where: { users: user.userId },
         //
       })
-      .then((set) => {
-        if (set) res.json({ result: set });
-        else res.json("Vous etes abonné à aucun cours...");
+      .then((subscritions) => {
+        if (subscritions) {
+          items.subsriptions = subscritions;
+          models.users
+            .findOne({
+              where: { id: subscritions[0].users },
+              attributes: ['username'],
+            })
+            .then((newUser) => {
+              items.user = newUser;
+              res.json({ items });
+            });
+        } else res.json("Vous etes abonné à aucun cours...");
       })
       .catch((error) => {
         console.log(error);
