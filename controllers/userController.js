@@ -15,7 +15,7 @@ module.exports = {
   adduser: async function (req, res) {
     try {
       const { username, passwords, levels } = req.body;
-      console.log(req.body);
+      console.log(req);
       const item = new models.users({
         id: shortid.generate(),
         username: username,
