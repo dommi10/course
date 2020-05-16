@@ -14,8 +14,7 @@ function checkError(req) {
 module.exports = {
   adduser: async function (req, res) {
     try {
-      const { username, passwords, levels } = req.body;
-      console.log(req);
+      const { username, passwords, levels } = req.body.user;
       const item = new models.users({
         id: shortid.generate(),
         username: username,
