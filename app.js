@@ -1,9 +1,10 @@
 const express = require("express");
 const routers = require("./routers");
 const bodyparser = require("body-parser");
+require("dotenv").config();
 
 const app = express();
-const port = 5200;
+const port = process.env.PORT;
 
 app.use(
   bodyparser.urlencoded({
@@ -14,10 +15,9 @@ app.use(
 app.get("/", (req, res) => res.send("Jambo..."));
 
 app.use("/auth", routers.auth);
-app.use("/app", routers.router);
 app.use("/message", routers.message);
 app.use("/course", routers.course);
-app.use("/sub", routers.subscription);
+app.use("/subscription", routers.subscription);
 
 app.listen(port, () =>
   console.log(`Example app listening at http://localhost:${port}`)

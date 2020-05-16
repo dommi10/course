@@ -15,18 +15,28 @@ module.exports = {
 
     models.abonnement
       .findOne({
-        where: { users: items.users },
+        where: { users: items.users, course: items.course },
       })
       .then((subscri) => {
-        if (subscri) {
+        if (subscri)
           res.json({
             error: "Vous avez déjà un abonnement pour ce cour...",
           });
-        } else {
-          models.abonnement.create(items).then((newsubscri) => {
-            res.json(newsubscri);
-          });
-        }
+        else
+          models.course
+            .findOne({
+              where: { id: items.course, prix: prix },
+            })
+            .then((newSubscri) => {
+              if (newSubscri)
+                models.abonnement.create(items).then((lastsubscri) => {
+                  res.json(lastsubscri);
+                });
+              else
+                res.json({
+                  error: "Montant incorrect pour cette abonnement...",
+                });
+            });
       })
       .catch((error) => {
         console.log(error);
@@ -43,16 +53,30 @@ module.exports = {
       //    unscri.abonnement.Update
     });
   },
-  subscri: function (req, res) {
+  subscrition: function (req, res) {
     const { user } = req;
+    let items = {
+      user: {},
+      subsriptions: {},
+    };
     models.abonnement
-      .findAll({ where: { users: user.userId } })
-      .then((set) => {
-        if (set) res.json(set);
-        else
-          res.status(403).json({
-            error: "Vous etes abonné à aucun cours...",
-          });
+      .findAll({
+        where: { users: user.userId },
+        //
+      })
+      .then((subscritions) => {
+        if (subscritions) {
+          items.subsriptions = subscritions;
+          models.users
+            .findOne({
+              where: { id: subscritions[0].users },
+              attributes: ['username'],
+            })
+            .then((newUser) => {
+              items.user = newUser;
+              res.json({ items });
+            });
+        } else res.json("Vous etes abonné à aucun cours...");
       })
       .catch((error) => {
         console.log(error);

@@ -4,37 +4,37 @@ const shortid = require("shortid");
 module.exports = {
   add: function (req, res) {
     try {
-      const { title, dates } = req.body;
+      const { title, dates, prix } = req.body;
       const { user } = req;
       console.log("##ID-> " + shortid.generate());
       const items = {
         id: shortid.generate(),
-        title: req.body.title,
+        title: title,
         dates: dates,
         userid: user.userId,
+        prix: prix,
       };
-
-      models.course
-        .findOne({ where: { title: title } })
-        .then((cours) => {
-          console.log("##Level-> " + user.levels);
-          if (cours) res.status(403).json({ error: "ce cours existe deja" });
-          else if (user.levels == 5)
-            models.course
-              .create(items)
-              .then((newCourse) => {
-                res.json({ newCourse });
-              })
-              .catch((err) => {
-                console.log(err);
-                res.status(403).json({ error: "something went wrong" });
-              });
-          else res.status(403).json({ error: "Acces Interdit !" });
-        })
-        .catch((error) => {
-          console.log(error);
-          res.status(403).json({ error: "something went wrong" });
-        });
+      if (user.levels == 5)
+        models.course
+          .findOne({ where: { title: title } })
+          .then((cours) => {
+            if (cours) res.status(403).json({ error: "ce cours existe deja" });
+            else
+              models.course
+                .create(items)
+                .then((newCourse) => {
+                  res.json({ newCourse });
+                })
+                .catch((err) => {
+                  console.log(err);
+                  res.status(403).json({ error: "something went wrong" });
+                });
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(403).json({ error: "something went wrong" });
+          });
+      else res.status(403).json({ error: "Acces Interdit !" });
     } catch (error) {
       console.log(error);
       return res.status(403).json({
@@ -80,46 +80,38 @@ module.exports = {
   },
   courses: function (req, res) {
     const { user } = req;
-    models.course
-      .findAll({
-        where: { userid: user.userId },
-      })
-      .then((courses) => {
-        if (!courses) {
-          res.json(courses);
-        } else {
+
+    if (user.userId == 5)
+      models.course
+        .findAll()
+        .then((courses) => {
+          if (courses) res.json(courses);
+        })
+        .catch((error) => {
+          console.log(error);
           res.status(403).json({
-            error: "Aucun cours enregistrer",
+            error: "someone went wrong",
           });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(403).json({
-          error: "someone went wrong",
         });
-      });
+    else res.json("Accès refusé...");
   },
   deleted: function (req, res) {
     const { user } = req;
     const { id } = req.body;
 
-    if (user.levels == 5) res.json("Acces refuser...");
+    if (user.levels < 5) res.json({ error: "Acces refuser..." });
     else
-models.
-
-
-
-
       models.course
-        .destroy({
-          where: { userid: user.userId, id },
+        .findOne({
+          where: { id: id },
         })
-        .then((isdelete) => {
-          if (isdelete)
-            res.json({
-              error: "success",
-            });
+        .then((course) => {
+          if (course) {
+            course.destroy();
+            res.json({ result: "delete success" });
+          } else {
+            res.json({ result: "item not existe" });
+          }
         })
         .catch((error) => {
           console.log(error);

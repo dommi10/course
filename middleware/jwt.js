@@ -6,7 +6,7 @@ module.exports = {
     const token = req.headers.authorization.split(" ")[1];
 
     jwt.verify(token, "motcle", (err, decodedToken) => {
-      if (err) {
+      if (err) {fdd
         console.log(err);
         res.status(403).json({ error: "invalid token" });
       } else {
