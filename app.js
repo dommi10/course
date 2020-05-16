@@ -13,6 +13,7 @@ app.use(
     extended: true,
   })
 );
+app.use(bodyparser.json());
 
 app.get("/", (req, res) => res.send("Jambo..."));
 
