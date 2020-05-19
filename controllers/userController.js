@@ -14,8 +14,7 @@ function checkError(req) {
 module.exports = {
   adduser: async function (req, res) {
     try {
-      const { username, passwords, levels } = req.body;
-
+      const { username, passwords, levels } = req.body.user;
       const item = new models.users({
         id: shortid.generate(),
         username: username,
@@ -29,11 +28,11 @@ module.exports = {
           },
         })) != null
       ) {
-        return res.status(400).json({
+        return res.status(403).json({
           error: "le nom d'utiisateur existe déjà...",
         });
       }
-      
+
       item.cryptPsswd(passwords);
 
       const value = await models.users.create({
@@ -50,7 +49,7 @@ module.exports = {
     } catch (error) {
       console.log(error);
       return res.status(400).json({
-        error: "some one waint... ",
+        error: "something went wrong... ",
       });
     }
   },

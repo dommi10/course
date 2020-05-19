@@ -1,9 +1,11 @@
 const express = require("express");
 const routers = require("./routers");
 const bodyparser = require("body-parser");
+const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
+app.use(cors());
 const port = process.env.PORT;
 
 app.use(
@@ -11,6 +13,7 @@ app.use(
     extended: true,
   })
 );
+app.use(bodyparser.json());
 
 app.get("/", (req, res) => res.send("Jambo..."));
 
