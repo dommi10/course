@@ -25,16 +25,21 @@ module.exports = {
         else
           models.course
             .findOne({
-              where: { id: items.course, prix: prix },
+              where: { id: items.course },
             })
             .then((newSubscri) => {
               if (newSubscri)
-                models.abonnement.create(items).then((lastsubscri) => {
-                  res.json(lastsubscri);
-                });
+                if (items.prix === newSubscri.prix)
+                  models.abonnement.create(items).then((lastsubscri) => {
+                    res.json(lastsubscri);
+                  });
+                else
+                  res.json({
+                    error: "Montant incorrect pour cette abonnement...",
+                  });
               else
                 res.json({
-                  error: "Montant incorrect pour cette abonnement...",
+                  error: "Course not found...",
                 });
             });
       })
@@ -70,7 +75,7 @@ module.exports = {
           models.users
             .findOne({
               where: { id: subscritions[0].users },
-              attributes: ['username'],
+              attributes: ["username"],
             })
             .then((newUser) => {
               items.user = newUser;

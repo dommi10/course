@@ -10,17 +10,17 @@ const port = process.env.PORT;
 
 app.use(
   bodyparser.urlencoded({
-    extended: true,
+    extended: false,
   })
 );
 app.use(bodyparser.json());
 
-app.get("/", (req, res) => res.send("Jambo..."));
+app.use("/api/auth", routers.auth);
+app.use("/api/messages", routers.message);
+app.use("/api/courses", routers.course);
+app.use("/api/subscriptions", routers.subscription);
 
-app.use("/auth", routers.auth);
-app.use("/message", routers.message);
-app.use("/course", routers.course);
-app.use("/subscription", routers.subscription);
+app.get("/*", (req, res) => res.sendFile("html/doc.html", { root: __dirname }));
 
 app.listen(port, () =>
   console.log(`Example app listening at http://localhost:${port}`)
