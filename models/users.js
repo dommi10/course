@@ -1,6 +1,7 @@
 /* jshint indent: 2 */
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 module.exports = function (sequelize, DataTypes) {
   const User = sequelize.define(
@@ -39,7 +40,10 @@ module.exports = function (sequelize, DataTypes) {
         userId: this.id,
         levels: this.levels,
       },
-      "motcle"
+      process.env.JWT_SECRET,
+      {
+        expiresIn:'24h'
+      }
     );
   };
 

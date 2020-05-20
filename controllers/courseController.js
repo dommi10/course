@@ -79,21 +79,22 @@ module.exports = {
       });
   },
   courses: function (req, res) {
-    const { user } = req;
-
-    if (user.userId == 5)
-      models.course
-        .findAll()
-        .then((courses) => {
-          if (courses) res.json(courses);
-        })
-        .catch((error) => {
-          console.log(error);
-          res.status(403).json({
-            error: "someone went wrong",
-          });
+    const { limit, order, offset } = req.body;
+    models.course
+      .findAll({
+        limit,
+        order,
+        offset,
+      })
+      .then((courses) => {
+        if (courses) res.json(courses);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(403).json({
+          error: "someone went wrong",
         });
-    else res.json("Accès refusé...");
+      });
   },
   deleted: function (req, res) {
     const { user } = req;
