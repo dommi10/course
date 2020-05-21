@@ -1,6 +1,6 @@
 const models = require("../models");
 const shortid = require("shortid");
-
+const { Op } = require("sequelize");
 module.exports = {
   add: function (req, res) {
     try {
@@ -120,6 +120,45 @@ module.exports = {
             error: "someone went wrong...",
           });
         });
+  },
+  searchs: function (req, res) {
+    // const { title, limit, order, offset } = req.body;
+    let { title, prix, dates, limit, offset } = req.query;
+    limit = parseInt(limit, 10);
+    offset = parseInt(offset, 10);
+    models.course
+      .findAll({
+        limit,
+        offset,
+        where: {
+          [Op.or]: [
+            {
+              title: {
+                [Op.like]: `%${title}%`,
+              },
+            },
+            {
+              prix: {
+                [Op.like]: `%${prix}`,
+              },
+            },
+            {
+              dates: {
+                [Op.like]: `%${dates}`,
+              },
+            },
+          ],
+        },
+      })
+      .then((search) => {
+        res.json(search);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(403).json({
+          error: "someone went wrong...",
+        });
+      });
   },
   // course:function(re)
 };
