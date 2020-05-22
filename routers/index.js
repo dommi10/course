@@ -3,6 +3,7 @@ const router = require("./router");
 const course = require("./course");
 const message = require("./message");
 const subscription = require("./subscription");
+const payment = require("./payment");
 
 module.exports = {
   auth,
@@ -10,4 +11,5 @@ module.exports = {
   message,
   course,
   subscription,
+  payment,
 };
