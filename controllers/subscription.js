@@ -5,7 +5,6 @@ module.exports = {
   subscribe: function (req, res) {
     const { user } = req;
     const { course, prix, dates } = req.body;
-    console.log(res.body);
     const items = {
       id: shortid.generate(),
       course: course,
