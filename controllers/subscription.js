@@ -19,7 +19,7 @@ module.exports = {
       })
       .then((subscri) => {
         if (subscri)
-          res.json({
+          res.status(403).json({
             error: "Vous avez déjà un abonnement pour ce cour...",
           });
         else
@@ -34,11 +34,11 @@ module.exports = {
                     res.json(lastsubscri);
                   });
                 else
-                  res.json({
+                  res.status(403).json({
                     error: "Montant incorrect pour cette abonnement...",
                   });
               else
-                res.json({
+                res.status(403).json({
                   error: "Course not found...",
                 });
             });

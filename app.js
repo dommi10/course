@@ -19,6 +19,7 @@ app.use("/api/auth", routers.auth);
 app.use("/api/messages", routers.message);
 app.use("/api/courses", routers.course);
 app.use("/api/subscriptions", routers.subscription);
+app.use("/api/payment", routers.payment);
 
 app.get("/*", (req, res) => res.sendFile("html/doc.html", { root: __dirname }));
 
