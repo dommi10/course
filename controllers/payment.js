@@ -13,6 +13,7 @@ module.exports = {
       res.json({ client_secret: paymentIntent.client_secret });
     } catch (error) {
       console.log(error);
+      res.status(403).json({ error: "error in payment process" });
     }
   },
   charge: async function (req, res) {
